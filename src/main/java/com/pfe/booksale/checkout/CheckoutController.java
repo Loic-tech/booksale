@@ -1,6 +1,6 @@
 package com.pfe.booksale.checkout;
 
-import com.pfe.booksale.book.Book;
+
 import com.pfe.booksale.book.BookController;
 import com.pfe.booksale.shoppingcart.ShoppingCart;
 import com.pfe.booksale.shoppingcart.shoppingCartRepository;
@@ -42,7 +42,8 @@ public class CheckoutController {
           bookController.putPurchase(
                   checkout.getShoppingCart().get(i)
                   .getBook()
-                  .getId()
+                  .getId(),
+                  checkout.getShoppingCart().get(i).getQuantity()
           );
       }
 
@@ -66,6 +67,13 @@ public class CheckoutController {
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deleteOne(@PathVariable String id){
         checkoutRepository.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+    @DeleteMapping(value = "/delete")
+    public ResponseEntity<?> delete(){
+        checkoutRepository.deleteAll();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

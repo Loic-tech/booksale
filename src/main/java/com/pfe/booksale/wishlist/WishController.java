@@ -37,4 +37,10 @@ public class WishController {
         wishRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @DeleteMapping(value = "/delete")
+    public ResponseEntity<?> delete(){
+        wishRepository.deleteAll();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

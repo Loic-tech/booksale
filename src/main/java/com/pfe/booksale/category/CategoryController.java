@@ -56,6 +56,12 @@ public class CategoryController {
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
+    @DeleteMapping(value = "/delete")
+    public ResponseEntity<?> delete(){
+        categoryRepository.deleteAll();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 
 
 

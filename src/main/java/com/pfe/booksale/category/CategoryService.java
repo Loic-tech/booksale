@@ -51,6 +51,7 @@ public class CategoryService {
         Category category1 = optionalCategory.get();
 
         category1.setName(category.getName());
+        category1.setMin(category.getMin());
 
         categoryRepository.save(category1);
 

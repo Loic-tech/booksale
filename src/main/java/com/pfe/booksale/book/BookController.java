@@ -43,41 +43,23 @@ public class BookController {
     }
 
     @PutMapping(value = "/modify/{id}")
-    public ResponseEntity<?> putPurchase(@PathVariable String id){
+    public ResponseEntity<?> putPurchase(@PathVariable String id,int quantity){
         Optional<Book> optionalBook = bookRepository.findById(id);
 
 
         if(optionalBook.isEmpty())
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        int total = 1;
 
             Book book = optionalBook.get();
-            book.setPurchased(book.getPurchased() + total);
+            book.setPurchased(book.getPurchased() + quantity);
+            book.setQuantity(book.getQuantity() - quantity);
 
             bookRepository.save(book);
 
             return new ResponseEntity<>(book,HttpStatus.OK);
 
     }
-
-    /*@PutMapping(value = "/quantity/{id}")
-    public ResponseEntity<?> putQuantity(@PathVariable String id){
-        Optional<Book> optionalBook = bookRepository.findById(id);
-
-
-        if(optionalBook.isEmpty())
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        int total = 1;
-
-        Book book = optionalBook.get();
-        book.setPurchased(book.getPurchased() + total);
-
-        bookRepository.save(book);
-
-        return new ResponseEntity<>(book,HttpStatus.OK);
-    }*/
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<?> putBook(@PathVariable String id, @RequestBody Book book){
@@ -96,10 +78,21 @@ public class BookController {
         book1.setPrice(book.getPrice());
         book1.setPurchased(book.getPurchased());
         book1.setTitle(book.getTitle());
+        book1.setQuantity(book.getQuantity());
+        book1.setIsbn(book.getIsbn());
+        book1.setDate(book.getDate());
+
 
         bookRepository.save(book1);
 
         return new ResponseEntity<>(book1,HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/authorsList/{id}")
+    public int getListBooksOfAuthors(@PathVariable String id){
+        List<Book> bookList = bookRepository.findByAuthorId(id);
+        int total = bookList.size();
+        return total;
     }
 
     @GetMapping(value = "/category/{id}")
@@ -118,5 +111,11 @@ public class BookController {
     public ResponseEntity<?> deleteBookById(@PathVariable String id) throws BookException{
         bookRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/delete")
+    public ResponseEntity<?> deleteBooks(){
+        bookRepository.deleteAll();
+        return new ResponseEntity<>("Successfully DELETED !",HttpStatus.OK);
     }
 }
